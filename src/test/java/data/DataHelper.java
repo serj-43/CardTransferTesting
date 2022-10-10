@@ -17,5 +17,13 @@ public class DataHelper {
         return new AuthInfo("vasya", "qwerty123");
     }
 
+    @Value
+    public static class VerificationCode {
+        private String code;
+    }
+
+    public static VerificationCode getVerifavationCodeFor(AuthInfo authInfo) {
+        return new VerificationCode("12345");
+    }
 
 }
