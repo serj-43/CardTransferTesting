@@ -37,4 +37,10 @@ public class DataHelper {
         );
     }
 
+    public static CardNumber getWrongClientCard() {
+        return new CardNumber(
+                new String[]{"5559 0000 0000 000"}
+        );
+    }
+
 }
