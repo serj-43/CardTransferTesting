@@ -27,20 +27,20 @@ public class DataHelper {
     }
 
     @Value
-    public static class CardNumber {
-        private String[] cardArray;
+    public static class Cards {
+        private String cardNumber;
     }
 
-    public static CardNumber getClientCards(AuthInfo authInfo) {
-        return new CardNumber(
-                new String[]{"5559 0000 0000 0001", "5559 0000 0000 0002"}
-        );
+    public static Cards getClientCard1(AuthInfo authInfo) {
+        return new Cards("5559 0000 0000 0001");
     }
 
-    public static CardNumber getWrongClientCard() {
-        return new CardNumber(
-                new String[]{"5559 0000 0000 000"}
-        );
+    public static Cards getClientCard2(AuthInfo authInfo) {
+        return new Cards("5559 0000 0000 0002");
+    }
+
+    public static Cards getWrongClientCard() {
+        return new Cards("5559 0000 0000 000");
     }
 
 }

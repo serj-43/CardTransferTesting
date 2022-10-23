@@ -18,93 +18,104 @@ public class CardTransferTest {
 
     @Test
     void shouldTransferBetweenCards1() {
-        var AuthInfo = DataHelper.getAuthInfo();
-        var Code = DataHelper.getVerificationCodeFor(AuthInfo);
-        var CardNumbers = DataHelper.getClientCards(AuthInfo);
-        float TransferSumm = 500.0F;
+        var authInfo = DataHelper.getAuthInfo();
+        var code = DataHelper.getVerificationCodeFor(authInfo);
+        var cardNumber2 = DataHelper.getClientCard2(authInfo);
+        float transferSumm = 500.0F;
 
-        var LoginPage = new LoginPage();
-        var VerificationPage = LoginPage.validLogin(AuthInfo);
-        var DashBoardPage = VerificationPage.validCode(Code);
-        DashBoardPage.depositCard1(TransferSumm, CardNumbers.getCardArray()[1]);
+        var loginPage = new LoginPage();
+        var verificationPage = loginPage.validLogin(authInfo);
+        var dashBoardPage = verificationPage.validCode(code);
+        float expected1 = dashBoardPage.getBalance(dashBoardPage.getBalance1()) + transferSumm;
+        float expected2 = dashBoardPage.getBalance(dashBoardPage.getBalance2()) - transferSumm;
 
-        float expected1 = DashBoardPage.getBalance(DashBoardPage.getBalance1()) + TransferSumm;
-        float expected2 = DashBoardPage.getBalance(DashBoardPage.getBalance2()) - TransferSumm;
-        assertEquals(expected1, DashBoardPage.getBalance(DashBoardPage.getBalance1()));
-        assertEquals(expected2, DashBoardPage.getBalance(DashBoardPage.getBalance2()));
+        var transferPage = dashBoardPage.depositCard1();
+        transferPage.transfer(transferSumm, cardNumber2.getCardNumber());
+
+        assertEquals(expected1, dashBoardPage.getBalance(dashBoardPage.getBalance1()));
+        assertEquals(expected2, dashBoardPage.getBalance(dashBoardPage.getBalance2()));
     }
 
     @Test
     void shouldTransferBetweenCards2() {
-        var AuthInfo = DataHelper.getAuthInfo();
-        var Code = DataHelper.getVerificationCodeFor(AuthInfo);
-        var CardNumbers = DataHelper.getClientCards(AuthInfo);
-        float TransferSumm = 5000;
+        var authInfo = DataHelper.getAuthInfo();
+        var code = DataHelper.getVerificationCodeFor(authInfo);
+        var cardNumber1 = DataHelper.getClientCard1(authInfo);
+        float transferSumm = 5000;
 
-        var LoginPage = new LoginPage();
-        var VerificationPage = LoginPage.validLogin(AuthInfo);
-        var DashBoardPage = VerificationPage.validCode(Code);
-        DashBoardPage.depositCard2(TransferSumm, CardNumbers.getCardArray()[0]);
+        var loginPage = new LoginPage();
+        var verificationPage = loginPage.validLogin(authInfo);
+        var dashBoardPage = verificationPage.validCode(code);
+        float expected1 = dashBoardPage.getBalance(dashBoardPage.getBalance1()) - transferSumm;
+        float expected2 = dashBoardPage.getBalance(dashBoardPage.getBalance2()) + transferSumm;
 
-        float expected1 = DashBoardPage.getBalance(DashBoardPage.getBalance1()) + TransferSumm;
-        float expected2 = DashBoardPage.getBalance(DashBoardPage.getBalance2()) - TransferSumm;
-        assertEquals(expected1, DashBoardPage.getBalance(DashBoardPage.getBalance1()));
-        assertEquals(expected2, DashBoardPage.getBalance(DashBoardPage.getBalance2()));
+        var transferPage = dashBoardPage.depositCard2();
+        transferPage.transfer(transferSumm, cardNumber1.getCardNumber());
+
+        assertEquals(expected1, dashBoardPage.getBalance(dashBoardPage.getBalance1()));
+        assertEquals(expected2, dashBoardPage.getBalance(dashBoardPage.getBalance2()));
     }
 
     @Test
     void shouldNotTransferWithoutCard1() {
-        var AuthInfo = DataHelper.getAuthInfo();
-        var Code = DataHelper.getVerificationCodeFor(AuthInfo);
-        var CardNumbers = DataHelper.getWrongClientCard();
-        float TransferSumm = 5000;
+        var authInfo = DataHelper.getAuthInfo();
+        var code = DataHelper.getVerificationCodeFor(authInfo);
+        var cardNumber = DataHelper.getWrongClientCard();
+        float transferSumm = 5000;
 
-        var LoginPage = new LoginPage();
-        var VerificationPage = LoginPage.validLogin(AuthInfo);
-        var DashBoardPage = VerificationPage.validCode(Code);
-        DashBoardPage.depositCard1(TransferSumm, CardNumbers.getCardArray()[0]);
-        DashBoardPage.checkError();
+        var loginPage = new LoginPage();
+        var verificationPage = loginPage.validLogin(authInfo);
+        var dashBoardPage = verificationPage.validCode(code);
+
+        var transferPage = dashBoardPage.depositCard1();
+        transferPage.transfer(transferSumm, cardNumber.getCardNumber());
+        transferPage.checkError();
     }
 
     @Test
     void shouldNotTransferWithoutCard2() {
-        var AuthInfo = DataHelper.getAuthInfo();
-        var Code = DataHelper.getVerificationCodeFor(AuthInfo);
-        var CardNumbers = DataHelper.getWrongClientCard();
-        float TransferSumm = 5000;
+        var authInfo = DataHelper.getAuthInfo();
+        var code = DataHelper.getVerificationCodeFor(authInfo);
+        var cardNumber = DataHelper.getWrongClientCard();
+        float transferSumm = 1;
 
-        var LoginPage = new LoginPage();
-        var VerificationPage = LoginPage.validLogin(AuthInfo);
-        var DashBoardPage = VerificationPage.validCode(Code);
-        DashBoardPage.depositCard2(TransferSumm, CardNumbers.getCardArray()[0]);
-        DashBoardPage.checkError();
+        var loginPage = new LoginPage();
+        var verificationPage = loginPage.validLogin(authInfo);
+        var dashBoardPage = verificationPage.validCode(code);
+
+        var transferPage = dashBoardPage.depositCard2();
+        transferPage.transfer(transferSumm, cardNumber.getCardNumber());
+        transferPage.checkError();
     }
-
     @Test
     void shouldTransferOverSum1() {
-        var AuthInfo = DataHelper.getAuthInfo();
-        var Code = DataHelper.getVerificationCodeFor(AuthInfo);
-        var CardNumbers = DataHelper.getClientCards(AuthInfo);
+        var authInfo = DataHelper.getAuthInfo();
+        var code = DataHelper.getVerificationCodeFor(authInfo);
+        var cardNumber2 = DataHelper.getClientCard2(authInfo);
 
-        var LoginPage = new LoginPage();
-        var VerificationPage = LoginPage.validLogin(AuthInfo);
-        var DashBoardPage = VerificationPage.validCode(Code);
-        float TransferSumm = (DashBoardPage.getBalance(DashBoardPage.getBalance2()) + 5000);
-        DashBoardPage.depositCard1(TransferSumm, CardNumbers.getCardArray()[1]);
-        DashBoardPage.checkError();
+        var loginPage = new LoginPage();
+        var verificationPage = loginPage.validLogin(authInfo);
+        var dashBoardPage = verificationPage.validCode(code);
+        float transferSumm = (dashBoardPage.getBalance(dashBoardPage.getBalance2()) + 5000);
+
+        var transferPage = dashBoardPage.depositCard1();
+        transferPage.transfer(transferSumm, cardNumber2.getCardNumber());
+        transferPage.checkError();
     }
 
     @Test
     void shouldTransferOverSum2() {
-        var AuthInfo = DataHelper.getAuthInfo();
-        var Code = DataHelper.getVerificationCodeFor(AuthInfo);
-        var CardNumbers = DataHelper.getClientCards(AuthInfo);
+        var authInfo = DataHelper.getAuthInfo();
+        var code = DataHelper.getVerificationCodeFor(authInfo);
+        var cardNumber1 = DataHelper.getClientCard1(authInfo);
 
-        var LoginPage = new LoginPage();
-        var VerificationPage = LoginPage.validLogin(AuthInfo);
-        var DashBoardPage = VerificationPage.validCode(Code);
-        float TransferSumm = (DashBoardPage.getBalance(DashBoardPage.getBalance2()) + 5000);
-        DashBoardPage.depositCard2(TransferSumm, CardNumbers.getCardArray()[0]);
-        DashBoardPage.checkError();
+        var loginPage = new LoginPage();
+        var verificationPage = loginPage.validLogin(authInfo);
+        var dashBoardPage = verificationPage.validCode(code);
+        float transferSumm = (dashBoardPage.getBalance(dashBoardPage.getBalance1()) + 5000);
+
+        var transferPage = dashBoardPage.depositCard1();
+        transferPage.transfer(transferSumm, cardNumber1.getCardNumber());
+        transferPage.checkError();
     }
 }
