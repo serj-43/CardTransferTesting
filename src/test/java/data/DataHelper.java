@@ -29,18 +29,19 @@ public class DataHelper {
     @Value
     public static class Cards {
         private String cardNumber;
+        private int shortNumber;
     }
 
     public static Cards getClientCard1(AuthInfo authInfo) {
-        return new Cards("5559 0000 0000 0001");
+        return new Cards("5559 0000 0000 0001", 1);
     }
 
     public static Cards getClientCard2(AuthInfo authInfo) {
-        return new Cards("5559 0000 0000 0002");
+        return new Cards("5559 0000 0000 0002", 2);
     }
 
     public static Cards getWrongClientCard() {
-        return new Cards("5559 0000 0000 000");
+        return new Cards("5559 0000 0000 000", 0);
     }
 
 }

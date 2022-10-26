@@ -20,20 +20,21 @@ public class CardTransferTest {
     void shouldTransferBetweenCards1() {
         var authInfo = DataHelper.getAuthInfo();
         var code = DataHelper.getVerificationCodeFor(authInfo);
+        var cardNumber1 = DataHelper.getClientCard1(authInfo);
         var cardNumber2 = DataHelper.getClientCard2(authInfo);
         float transferSumm = 500.0F;
 
         var loginPage = new LoginPage();
         var verificationPage = loginPage.validLogin(authInfo);
         var dashBoardPage = verificationPage.validCode(code);
-        float expected1 = dashBoardPage.getBalance(dashBoardPage.getBalance1()) + transferSumm;
-        float expected2 = dashBoardPage.getBalance(dashBoardPage.getBalance2()) - transferSumm;
+        float expected1 = dashBoardPage.getBalance(cardNumber1.getShortNumber()) + transferSumm;
+        float expected2 = dashBoardPage.getBalance(cardNumber2.getShortNumber()) - transferSumm;
 
         var transferPage = dashBoardPage.depositCard1();
         transferPage.transfer(transferSumm, cardNumber2.getCardNumber());
 
-        assertEquals(expected1, dashBoardPage.getBalance(dashBoardPage.getBalance1()));
-        assertEquals(expected2, dashBoardPage.getBalance(dashBoardPage.getBalance2()));
+        assertEquals(expected1, dashBoardPage.getBalance(cardNumber1.getShortNumber()));
+        assertEquals(expected2, dashBoardPage.getBalance(cardNumber2.getShortNumber()));
     }
 
     @Test
@@ -41,19 +42,20 @@ public class CardTransferTest {
         var authInfo = DataHelper.getAuthInfo();
         var code = DataHelper.getVerificationCodeFor(authInfo);
         var cardNumber1 = DataHelper.getClientCard1(authInfo);
+        var cardNumber2 = DataHelper.getClientCard2(authInfo);
         float transferSumm = 5000;
 
         var loginPage = new LoginPage();
         var verificationPage = loginPage.validLogin(authInfo);
         var dashBoardPage = verificationPage.validCode(code);
-        float expected1 = dashBoardPage.getBalance(dashBoardPage.getBalance1()) - transferSumm;
-        float expected2 = dashBoardPage.getBalance(dashBoardPage.getBalance2()) + transferSumm;
+        float expected1 = dashBoardPage.getBalance(cardNumber1.getShortNumber()) + transferSumm;
+        float expected2 = dashBoardPage.getBalance(cardNumber2.getShortNumber()) - transferSumm;
 
         var transferPage = dashBoardPage.depositCard2();
         transferPage.transfer(transferSumm, cardNumber1.getCardNumber());
 
-        assertEquals(expected1, dashBoardPage.getBalance(dashBoardPage.getBalance1()));
-        assertEquals(expected2, dashBoardPage.getBalance(dashBoardPage.getBalance2()));
+        assertEquals(expected1, dashBoardPage.getBalance(cardNumber1.getShortNumber()));
+        assertEquals(expected2, dashBoardPage.getBalance(cardNumber2.getShortNumber()));
     }
 
     @Test
@@ -96,7 +98,7 @@ public class CardTransferTest {
         var loginPage = new LoginPage();
         var verificationPage = loginPage.validLogin(authInfo);
         var dashBoardPage = verificationPage.validCode(code);
-        float transferSumm = (dashBoardPage.getBalance(dashBoardPage.getBalance2()) + 5000);
+        float transferSumm = (dashBoardPage.getBalance(cardNumber2.getShortNumber()) + 5000);
 
         var transferPage = dashBoardPage.depositCard1();
         transferPage.transfer(transferSumm, cardNumber2.getCardNumber());
@@ -112,7 +114,7 @@ public class CardTransferTest {
         var loginPage = new LoginPage();
         var verificationPage = loginPage.validLogin(authInfo);
         var dashBoardPage = verificationPage.validCode(code);
-        float transferSumm = (dashBoardPage.getBalance(dashBoardPage.getBalance1()) + 5000);
+        float transferSumm = (dashBoardPage.getBalance(cardNumber1.getShortNumber()) + 5000);
 
         var transferPage = dashBoardPage.depositCard1();
         transferPage.transfer(transferSumm, cardNumber1.getCardNumber());
